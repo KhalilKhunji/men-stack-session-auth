@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const authController = require('./controllers/auth.js');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-
+const isSignedIn = require('./middleware/is-signed-in.js');
 
 
 const app = express();
@@ -42,12 +42,8 @@ app.get("/", (req, res) => {
     res.render("index.ejs", { user });
 });
 
-app.get("/vip-lounge", (req, res) => {
-  if (req.session.user) {
+app.get("/vip-lounge", isSignedIn, (req, res) => {
     res.send(`Welcome to the party ${req.session.user.username}.`);
-  } else {
-    res.send("Sorry, no guests allowed.");
-  }
 });
 
 
