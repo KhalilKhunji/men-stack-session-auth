@@ -45,10 +45,15 @@ router.post('/sign-in', async (req, res) => {
     if (!existingUser) {
         return res.send('Login failed. Please try again.');
     };
-    const validPassword = await brcypt.compare(password, existingUser.password);
+    const validPassword = await bcrypt.compare(password, existingUser.password);
     if (!validPassword) {
         return res.send("Login failed. Please try again.");
     };
+    req.session.user = {
+        username: existingUser.username,
+        _id: existingUser._id
+    };
+    res.redirect("/");
 });
 
 module.exports = router;

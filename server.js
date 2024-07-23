@@ -4,6 +4,7 @@ require('./config/database');
 const methodOverride = require("method-override");
 const morgan = require("morgan");
 const authController = require('./controllers/auth.js');
+const session = require('express-session');
 
 
 const app = express();
@@ -20,11 +21,20 @@ app.use(methodOverride("_method"));
 // Morgan for logging HTTP requests
 app.use(morgan('dev'));
 
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
 // Routes
 app.use("/auth", authController);
 
 app.get("/", (req, res) => {
-    res.render("index.ejs");
+    const user = req.session.user;  
+    res.render("index.ejs", { user });
 });
 
 
