@@ -8,7 +8,9 @@
     <title>Home Page</title>
   </head>
   <body>
+
     <% if (user) { %>
+      <a href="/auth/sign-out">Sign out</a>
       <h1>Welcome to the app, <%= user.username %>!</h1>
     <% } else { %>
       <h1>Welcome to the app, guest.</h1>
