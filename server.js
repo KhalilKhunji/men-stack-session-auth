@@ -7,6 +7,7 @@ const authController = require('./controllers/auth.js');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const isSignedIn = require('./middleware/is-signed-in.js');
+const passUserToView = require('./middleware/pass-user-to-view.js');
 
 
 const app = express();
@@ -34,12 +35,14 @@ app.use(
   })
 );
 
+app.use(passUserToView);
+
 // Routes
 app.use("/auth", authController);
 
 app.get("/", (req, res) => {
     const user = req.session.user;  
-    res.render("index.ejs", { user });
+    res.render("index.ejs");
 });
 
 app.get("/vip-lounge", isSignedIn, (req, res) => {
