@@ -26,7 +26,13 @@ router.post('/sign-up', async (req, res, next) => {
             password: hashedPassword
         };
         const user = await User.create(payload);
-        res.send(`Thanks for signing up ${user.username}`);
+        req.session.user = {
+            username: user.username,
+            _id: user._id
+        };
+        req.session.save(() => {
+            res.redirect("/");
+        });
     } catch (error) {
         // next(error);
         throw new Error('Something went wrong');
