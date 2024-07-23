@@ -5,6 +5,8 @@ const methodOverride = require("method-override");
 const morgan = require("morgan");
 const authController = require('./controllers/auth.js');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
+
 
 
 const app = express();
@@ -26,6 +28,9 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: process.env.DATABASE_URL
+    })
   })
 );
 
